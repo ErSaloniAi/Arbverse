@@ -10,7 +10,7 @@ ARBVERSE helps users understand **Blockchain fundamentals**, **Arbitrum Layer 2*
 
 Add your deployed link here:
 
-🔗 https://yourusername.github.io/arbverse/
+🔗 [https://yourusername.github.io/arbverse/](https://ersaloniai.github.io/Arbverse/)
 
 ---
 
