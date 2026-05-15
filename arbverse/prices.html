@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Crypto Prices - ARBVERSE</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="[fonts.googleapis.com](https://fonts.googleapis.com)">
+    <link rel="preconnect" href="[fonts.gstatic.com](https://fonts.gstatic.com)" crossorigin>
+    <link href="[fonts.googleapis.com](https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap)" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="index.html" class="nav-logo">
+                <span class="logo-icon">◈</span>
+                ARBVERSE
+            </a>
+            <button class="nav-toggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="concepts.html" class="nav-link">Concepts</a></li>
+                <li><a href="prices.html" class="nav-link active">Live Prices</a></li>
+                <li><a href="index.html#contact" class="nav-link">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Page Header -->
+        <section class="page-header">
+            <div class="container">
+                <span class="section-badge">Real-Time Data</span>
+                <h1 class="page-title">Live Crypto Prices</h1>
+                <p class="page-subtitle">
+                    Track Bitcoin and Ethereum prices in real-time. 
+                    Data refreshes automatically from CoinGecko API.
+                </p>
+            </div>
+        </section>
+
+        <!-- Price Dashboard -->
+        <section class="section">
+            <div class="container">
+                <div class="dashboard-header">
+                    <div class="dashboard-title">
+                        <h2>Market Overview</h2>
+                        <p class="last-updated">
+                            Last updated: <span id="lastUpdated">--</span>
+                        </p>
+                    </div>
+                    <button class="btn btn-primary refresh-btn" id="refreshBtn">
+                        <svg class="refresh-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M23 4v6h-6M1 20v-6h6"/>
+                            <path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/>
+                        </svg>
+                        <span>Refresh</span>
+                    </button>
+                </div>
+
+                <!-- Loading State -->
+                <div class="loading-container" id="loadingState">
+                    <div class="loading-spinner"></div>
+                    <p>Fetching latest prices...</p>
+                </div>
+
+                <!-- Error State -->
+                <div class="error-container" id="errorState" style="display: none;">
+                    <div class="error-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <path d="M12 8v4M12 16h.01"/>
+                        </svg>
+                    </div>
+                    <h3>Unable to Fetch Prices</h3>
+                    <p id="errorMessage">Please check your internet connection and try again.</p>
+                    <button class="btn btn-secondary" onclick="fetchPrices()">
+                        Try Again
+                    </button>
+                </div>
+
+                <!-- Price Cards -->
+                <div class="price-grid" id="priceGrid" style="display: none;">
+                    <!-- Bitcoin Card -->
+                    <div class="glass-card price-card" id="bitcoinCard">
+                        <div class="price-header">
+                            <div class="crypto-info">
+                                <div class="crypto-icon bitcoin">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M23.638 14.904c-1.602 6.43-8.113 10.34-14.542 8.736C2.67 22.05-1.244 15.525.362 9.105 1.962 2.67 8.475-1.243 14.9.358c6.43 1.605 10.342 8.115 8.738 14.546z"/>
+                                        <path fill="#fff" d="M17.5 10.5c.3-2-1.2-3-3.3-3.7l.7-2.8-1.7-.4-.7 2.7c-.4-.1-.9-.2-1.4-.3l.7-2.7-1.7-.4-.7 2.8c-.4-.1-.7-.2-1-.2l-2.4-.6-.4 1.8s1.2.3 1.2.3c.7.2.8.6.8 1l-.8 3.2c0 .1.1.1.1.1l-.2-.1-1.1 4.5c-.1.2-.3.5-.8.4 0 0-1.2-.3-1.2-.3l-.8 2 2.3.6c.4.1.8.2 1.2.3l-.7 2.8 1.7.4.7-2.8c.5.1 1 .2 1.4.3l-.7 2.8 1.7.4.7-2.8c2.9.5 5.1.3 6-2.3.7-2.1 0-3.3-1.5-4 1.1-.3 1.9-1 2.1-2.5zm-3.8 5.3c-.5 2.1-4 1-5.1.7l.9-3.7c1.1.3 4.7.8 4.2 3zm.5-5.4c-.5 1.9-3.4.9-4.3.7l.8-3.4c.9.2 4 .6 3.5 2.7z"/>
+                                    </svg>
+                                </div>
+                                <div class="crypto-details">
+                                    <h3>Bitcoin</h3>
+                                    <span class="crypto-symbol">BTC</span>
+                                </div>
+                            </div>
+                            <div class="price-change" id="btcChange">
+                                <span class="change-arrow">--</span>
+                                <span class="change-value">--%</span>
+                            </div>
+                        </div>
+                        <div class="price-value">
+                            <span class="currency">$</span>
+                            <span class="amount" id="btcPrice">--</span>
+                        </div>
+                        <div class="price-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">24h Change</span>
+                                <span class="meta-value" id="btcChangeValue">--</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Market Cap Rank</span>
+                                <span class="meta-value">#1</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Ethereum Card -->
+                    <div class="glass-card price-card" id="ethereumCard">
+                        <div class="price-header">
+                            <div class="crypto-info">
+                                <div class="crypto-icon ethereum">
+                                    <svg width="32" height="32" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M12 0L4.5 12.2l7.5 4.4 7.5-4.4L12 0z" opacity="0.6"/>
+                                        <path d="M4.5 12.2L12 24l7.5-11.8-7.5 4.4-7.5-4.4z"/>
+                                        <path d="M12 0v9.8l7.5 2.4L12 0z" opacity="0.8"/>
+                                        <path d="M12 0L4.5 12.2l7.5-2.4V0z"/>
+                                        <path d="M12 16.6v7.4l7.5-11.8-7.5 4.4z" opacity="0.8"/>
+                                        <path d="M12 24v-7.4l-7.5-4.4L12 24z"/>
+                                    </svg>
+                                </div>
+                                <div class="crypto-details">
+                                    <h3>Ethereum</h3>
+                                    <span class="crypto-symbol">ETH</span>
+                                </div>
+                            </div>
+                            <div class="price-change" id="ethChange">
+                                <span class="change-arrow">--</span>
+                                <span class="change-value">--%</span>
+                            </div>
+                        </div>
+                        <div class="price-value">
+                            <span class="currency">$</span>
+                            <span class="amount" id="ethPrice">--</span>
+                        </div>
+                        <div class="price-meta">
+                            <div class="meta-item">
+                                <span class="meta-label">24h Change</span>
+                                <span class="meta-value" id="ethChangeValue">--</span>
+                            </div>
+                            <div class="meta-item">
+                                <span class="meta-label">Market Cap Rank</span>
+                                <span class="meta-value">#2</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Market Stats -->
+                <div class="glass-card market-stats" id="marketStats" style="display: none;">
+                    <h3>Quick Stats</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <span class="stat-icon">📊</span>
+                            <div class="stat-content">
+                                <span class="stat-value" id="btcDominance">--</span>
+                                <span class="stat-label">BTC Dominance</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">💹</span>
+                            <div class="stat-content">
+                                <span class="stat-value" id="ethRatio">--</span>
+                                <span class="stat-label">ETH/BTC Ratio</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">🔄</span>
+                            <div class="stat-content">
+                                <span class="stat-value">Auto</span>
+                                <span class="stat-label">Refresh: 60s</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- API Info -->
+                <div class="glass-card api-info">
+                    <div class="api-badge">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/>
+                            <path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/>
+                        </svg>
+                        <span>Powered by CoinGecko API</span>
+                    </div>
+                    <p>
+                        Data is fetched from CoinGecko's free public API. 
+                        Prices update automatically every 60 seconds.
+                    </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-icon">◈</span>
+                    <span>ARBVERSE</span>
+                </div>
+                <div class="footer-info">
+                    <p>Created by <strong>Saloni Gorsiya</strong></p>
+                    <p>Batch: Web3 Development 2024</p>
+                </div>
+                <div class="footer-links">
+                    <a href="[github.com](https://github.com/salonigorsiya)" target="_blank" rel="noopener noreferrer" class="footer-link">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        <span>GitHub</span>
+                    </a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 ARBVERSE. Built for educational purposes.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
